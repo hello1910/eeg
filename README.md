@@ -16,5 +16,7 @@
 ## Modifications
 You can modify the model architecture in kerasgetmodel.py
 
-## Dataset folders--same as temple eeg data
+## Dataset folders
+Dataset is the temple eeg abnormal corpus.
+
 There are two folders in the main directory, train and eval. Inside each folder are two subfolders, abnormal and normal. Each contain the respective EEG signals.
