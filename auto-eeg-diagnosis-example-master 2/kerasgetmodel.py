@@ -180,8 +180,8 @@ def get_model():
     
     shape= K.int_shape(part1) 
     
-    part2=Dense(shape[1])(gru_out)
-    part2=Permute((2,1))(part2)
+    part2=Dense(shape[1])(gru_out) #change output to dimensions in order to add
+    part2=Permute((2,1))(part2) 
     part3= Add()([part1,part2])
     
     score = Activation("tanh")(part3) 
@@ -189,7 +189,7 @@ def get_model():
     
     attention_weights=Lambda(lambda x: softmax(x,axis=1))(part4)
     
-    context_vector=multiply([attention_weights,features])
+    context_vector=multiply([attention_weights,features]) #weighting the pixels
     context_vector=Lambda(lambda x: K.sum(x,axis=1))(context_vector)
     
     context_vector_mod=Dense(600)(context_vector)
