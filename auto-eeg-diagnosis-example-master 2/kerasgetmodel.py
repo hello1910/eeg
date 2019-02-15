@@ -68,30 +68,7 @@ balloony[np.isnan(balloony)]=0.1
 balloony=np.nan_to_num(balloony)
 h5f.close()
 
-def sparse_cross_entropy(y_true, y_pred):
-    
-    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y_true,
-                                                          logits=y_pred)
 
-    loss_mean = tf.reduce_mean(loss)
-
-    return loss_mean
-
-def sparse_cross_entropy2(y_true, y_pred):
-    
-    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y_true,
-                                                          logits=y_pred)
-
-    return loss
- 
-def cross_entropy1(y_true, y_pred):
-    
-    loss = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y_true,
-                                                          logits=y_pred)
-
-    loss_mean = tf.reduce_mean(loss)
-
-    return loss_mean
 def cross_entropy2(y_true, y_pred):
     
     loss = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y_true,
