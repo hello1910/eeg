@@ -16,22 +16,4 @@
 You can modify the model architecture in kerasgetmodel.py
 
 ## Dataset folders--same as temple eeg data
----train
------abnormal
------normal
----eval
------abnormal
------normal
-
-```
-@INPROCEEDINGS{schirrmreegdiag2017,
-  author={R. Schirrmeister and L. Gemein and K. Eggensperger and F. Hutter and T. Ball},
-  booktitle={2017 IEEE Signal Processing in Medicine and Biology Symposium (SPMB)},
-  title={Deep learning with convolutional neural networks for decoding and visualization of EEG pathology},
-  year={2017},
-  volume={},
-  number={},
-  pages={1-7},
-  ISSN={},
-  month={Dec},}
-```
+There are two folders in the main directory, train and eval. Inside each folder are two subfolders, abnormal and normal. Each contain the respective EEG signals.
