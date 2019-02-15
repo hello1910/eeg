@@ -1,15 +1,27 @@
 # auto-eeg-diagnosis-example
 
 ## Requirements
-1. Depends on https://robintibor.github.io/braindecode/ 
-2. This code was programmed in Python 3.6 (might work for other versions also).
+1. Install https://robintibor.github.io/braindecode/ 
+
 
 ## Run
-1. Modify config.py, especially correct data folders for your path..
-2. Run with `python ./auto_diagnosis.py`
+1. Run 'python kerasgetmodel.py'
 
-## Paper / Citation
-The corresponding paper *Deep learning with convolutional neural networks for decoding and visualization of EEG pathology* is at https://arxiv.org/abs/1708.08012 . Now published at http://ieeexplore.ieee.org/document/8257015/ , please cite that version:
+
+## Model Architecture
+1. The encoder architecture for the eeg is implemented from https://arxiv.org/abs/1807.03402.
+2. The decoder architecture is a multi-layered CNN with spatial attention.
+
+## Modifications
+You can modify the model architecture in kerasgetmodel.py
+
+## Dataset folders--same as temple eeg data
+---train
+-----abnormal
+-----normal
+---eval
+-----abnormal
+-----normal
 
 ```
 @INPROCEEDINGS{schirrmreegdiag2017,
