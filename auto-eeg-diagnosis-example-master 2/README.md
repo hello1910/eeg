@@ -1,4 +1,4 @@
-# auto-eeg-diagnosis-example
+# EEG
 
 ## Requirements
 1. Install https://robintibor.github.io/braindecode/ 
