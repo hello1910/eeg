@@ -104,13 +104,13 @@ def cross_entropy2(y_true, y_pred):
 def get_model(): 
  
     CONC=[] 
-    IGLOO_V=[] 
+    IGLOO_V=[] ###STRUCTURE FROM IGLOO PAPER BEGINS
  
     inin = Input(shape=input_shape, name='input')
     
     #inin=Lambda(lambda q: q[:,1:,:]) (inin) 
 
-    a=Conv1D(40,2,padding="causal")(inin)
+    a=Conv1D(40,2,padding="causal")(inin) #first set of convolutions
     b=Conv1D(40,4,padding="causal")(inin)
     c=Conv1D(40,8,padding="causal")(inin)
 
@@ -118,7 +118,7 @@ def get_model():
     x=Activation("relu")(x)
     x= BatchNormalization(axis=-1)(x)
 
-    a=Conv1D(40,2,padding="causal")(x)
+    a=Conv1D(40,2,padding="causal")(x) #second set of convolutions
     b=Conv1D(40,4, padding="causal")(x)
     c=Conv1D(40,8, padding="causal")(x)
 
@@ -126,7 +126,7 @@ def get_model():
     x=Activation("relu")(x)
     x= BatchNormalization(axis=-1)(x)
 
-    a=Conv1D(40,2,padding="causal")(x)
+    a=Conv1D(40,2,padding="causal")(x) #third set of convolutions
     b=Conv1D(40,4,padding="causal")(x)
     c=Conv1D(40,8, padding="causal")(x)
 
@@ -147,7 +147,7 @@ def get_model():
 
     CONC.append(IGLOO_V[0]) 
  
-    for kk in range(5): 
+    for kk in range(5):  #IGLOO patches
  
         x=Conv1D(C1D_K, 1,strides=1,padding=padding)  (CONC[kk]) 
         x = BatchNormalization(axis=-1) (x) 
@@ -169,11 +169,11 @@ def get_model():
     x = SpatialDropout1D(mDR) (x) 
  
     y=IGLOO(x,nb_patches,CONV1D_dim,patch_size=patch_size,return_sequences=False,l2reg=igloo_l2reg,padding_style=padding,nb_stacks=nb_stacks,DR=mDR,max_pooling_kernel=MAXPOOL_size) 
-  
+    #### Structure from IGLOO Paper ends
     
     y=Dense(64,activation='relu') (y) 
     y=Dropout(0.4) (y)
-    output_1=Dense(1,activation='softmax') (y)
+    output_1=Dense(1,activation='softmax') (y) #first output, a binary classification of normal or abnormal
 
     word_input = Input(shape=(9,), name='decoder_input')
     
@@ -187,27 +187,27 @@ def get_model():
 
     #input_ = BatchNormalization(axis=-1)(input_)
     gru_out=GRU(700, activation='tanh', recurrent_activation='sigmoid', 
-    dropout=0.22,return_sequences=True, return_state=False,unroll=False,reset_after=True)(input_)
+    dropout=0.22,return_sequences=True, return_state=False,unroll=False,reset_after=True)(input_) #first gru layer
     
     input_=gru_out
     
     input_ = BatchNormalization(axis=-1)(input_)
-    gru_out=GRU(700, activation='tanh', recurrent_activation='sigmoid', 
+    gru_out=GRU(700, activation='tanh', recurrent_activation='sigmoid',  #second gru layer
     dropout=0.22,return_sequences=True, return_state=False,unroll=False,reset_after=True)(input_)
     input_ = gru_out
     
-    features=Permute((2,1))(x)
+    features=Permute((2,1))(x) . ##attention mechanism begins
  
     part1=Dense(700)(features)
     gru_out=Permute((2,1))(gru_out)
     
-    shape= K.int_shape(part1) #should features be part1? 
+    shape= K.int_shape(part1) 
     
     part2=Dense(shape[1])(gru_out)
     part2=Permute((2,1))(part2)
     part3= Add()([part1,part2])
     
-    score = Activation("tanh")(part3)
+    score = Activation("tanh")(part3) 
     part4= Dense(1)(score)
     
     attention_weights=Lambda(lambda x: softmax(x,axis=1))(part4)
@@ -217,7 +217,7 @@ def get_model():
     
     context_vector_mod=Dense(600)(context_vector)
     context_vector_mod = Lambda(lambda x: K.expand_dims(x, -1))(context_vector_mod)
-    context_vector_mod=Permute((2,1))(context_vector_mod)
+    context_vector_mod=Permute((2,1))(context_vector_mod) . ##attention mechanism ends
     
     gru_out_mod=Dense(600)(gru_out)
 
@@ -228,19 +228,12 @@ def get_model():
 
     input_ = BatchNormalization(axis=-1)(input_)
     gru_out=GRU(9, activation='tanh', recurrent_activation='sigmoid', dropout=0.22,return_sequences=True, return_state=False,unroll=False,reset_after=True)(input_)
-    #gru_out = LSTM(units=9,
-                  #return_sequences=True,
-                  #dropout=0.22,
-                  #recurrent_dropout=0.22)(input_)
+   
     gru_out=Permute((2,1))(gru_out)
-    #gru_out=GRU(700, activation='tanh', recurrent_activation='sigmoid', 
-    #dropout=0.22,return_sequences=True, return_state=False,unroll=False,reset_after=True)(input_)
-    #input_= gru_out
-
-
-    #gru_out=Flatten()(input_)
+  
+  
     gru_out=Activation("tanh")(gru_out)
-    sequence_output = TimeDistributed(Dense(units=vocab_size))(gru_out)
+    sequence_output = TimeDistributed(Dense(units=vocab_size))(gru_out) ##final word is generated
     
     
  
