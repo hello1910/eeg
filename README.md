@@ -5,7 +5,8 @@
 
 
 ## Run
-1. Run 'python kerasgetmodel.py'
+1. cd auto*
+2. Run 'python kerasgetmodel.py'
 
 
 ## Model Architecture
